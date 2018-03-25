@@ -25,11 +25,9 @@ bool cOpponentManager::CreateOpponentThread( cGameObject* pGameObject, cOpponent
 	}
 
 	pOpponent = new cOpponent(this->m_nextOpponentID);
-	pOpponent->setDalkeManager( this );
+	pOpponent->setOpponentManager( this );
 	pOpponent->setRandThreaded( g_pThreadedRandom );	
 
-	pOpponent->minDistanceToMove = 50.0f;
-	pOpponent->maxDistanceToMove = 250.0f;
 	pOpponent->maxVelocity = 25.0f;
 
 	pOpponent->position = pGameObject->position;
@@ -191,13 +189,14 @@ void cOpponentManager::SetIsUpdatingOnAllOpponents( bool bIsUpdating )
 }
 
 // Update target position on all Opponents
-void cOpponentManager::UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection )
+void cOpponentManager::UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth )
 {
 	this->m_LockOpponentData();
 	for( unsigned int index = 0; index != this->m_NumberOfOpponents; index++ )
 	{
 		this->m_vec_pOpponents[index]->target = targetPosition;
 		this->m_vec_pOpponents[index]->targetDirection = targetDirection;
+		this->m_vec_pOpponents[index]->targetHealth = targetHealth;
 	}
 	this->m_UnlockOpponentData();
 

@@ -62,7 +62,7 @@ public:
 	virtual void SetIsUpdatingOnAllOpponents( bool bIsUpdating );
 
 	// Update target Position on all Opponents
-	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection );
+	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth );
 
 	virtual bool IsDataLocked(void);
 

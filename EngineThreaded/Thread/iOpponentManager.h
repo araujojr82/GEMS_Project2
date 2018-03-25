@@ -4,8 +4,10 @@
 #include <glm/glm.hpp>
 #include <vector> 
 
-class cGameObject;	// Forward declare to omit include
-enum eEnemyBehaviour;	// Forward declare to omit include
+#include "../cGameObject.h"
+
+//class cGameObject;	// Forward declare to omit include
+//enum eEnemyBehaviour;	// Forward declare to omit include
 
 class cOpponent;
 
@@ -53,7 +55,7 @@ public:
 	virtual void SetIsUpdatingOnAllOpponents( bool bIsUpdating ) = 0;
 
 	// Update target Position on all Opponents
-	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection ) = 0;
+	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth ) = 0;
 
 };
 

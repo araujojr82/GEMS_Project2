@@ -35,30 +35,6 @@ glm::vec3 movement = glm::vec3( 0.0f );
 
 	switch ( key )
 	{
-		case GLFW_KEY_A:		//
-			::g_pSteeringManager->CIRCLE_RADIUS *= 0.95f;		
-			break;
-
-		case GLFW_KEY_D:		//
-			::g_pSteeringManager->CIRCLE_RADIUS *= 1.05f;
-			break;
-
-		case GLFW_KEY_W:		//
-			::g_pSteeringManager->CIRCLE_DISTANCE *= 1.05f;			
-			break;
-
-		case GLFW_KEY_S:		//
-			::g_pSteeringManager->CIRCLE_DISTANCE *= 0.95f;
-			break;
-
-		case GLFW_KEY_Q:		//
-			::g_pSteeringManager->ANGLE_CHANGE *= 0.95f;
-			break;
-
-		case GLFW_KEY_E:		// "Up" (along y axis)
-			::g_pSteeringManager->ANGLE_CHANGE *= 1.05f;
-			break;
-
 		case GLFW_KEY_UP:
 			if( action == GLFW_PRESS )
 			{
