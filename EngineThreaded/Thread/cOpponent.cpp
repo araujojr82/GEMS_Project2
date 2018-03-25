@@ -3,29 +3,19 @@
 
 #include <iostream>
 
-//#define DEBUG_PRINT_STATUS_TO_CONSOLE
-
 // Can't call (is private)
 cOpponent::cOpponent()
 {
 	return;
 }
 
-// These are all static
-const float cOpponent::DEFAULT_MIN_DISTANCE_TO_MOVE = 1.0;
-const float cOpponent::DEFAULT_MAX_DISTANCE_TO_MOVE = 25.0;
-
-
 cOpponent::cOpponent(unsigned int OpponentID_or_Index)
 {
-#ifdef DEBUG_PRINT_STATUS_TO_CONSOLE 
-	std::cout << "Opponent " << OpponentID_or_Index << " is created" << std::endl;
-	std::cout.flush();
-#endif
 
 	this->position = glm::vec3(0.0f);
 	this->velocity = glm::vec3(0.0f);
 	this->target = glm::vec3(0.0f);
+	this->targetDirection = glm::vec3( 0.0f );
 
 	// set this to -ve to force it choosing a new direction
 	this->timeToMove = -1.0f;
@@ -35,11 +25,7 @@ cOpponent::cOpponent(unsigned int OpponentID_or_Index)
 	this->bIsAlive = true;
 
 	this->bIsUpdating = false;
-
-	float minDistanceToMove = cOpponent::DEFAULT_MIN_DISTANCE_TO_MOVE;
-	float maxDistanceToMove = cOpponent::DEFAULT_MAX_DISTANCE_TO_MOVE;
-
-
+	
 	this->m_OpponentID_or_Index = OpponentID_or_Index;
 
 	// Each Opponent has it's own timer, since each thread could execute at different rates
@@ -63,10 +49,43 @@ unsigned int cOpponent::getOpponentID(void)
 	return this->m_OpponentID_or_Index;
 }
 
+bool isTargetFacingMe( glm::vec3 targetDirection, glm::vec3 targetPosition )
+{
+	bool isItFacing;
+
+	//// dotProduct( normalize( B - A ), normalize( directionFacingOfA ) )
+	//float facing = glm::dot( glm::normalize( this->position - targetPosition ), targetDirection );
+
+	//if( facing < 0 )	// It's not facing, looking to opposite direction
+	//{
+	//	isItFacing = false;
+	//}
+	//else				// It's in the 180 degrees direction
+	//{
+	//	if( facing >= 0.5f ) // It's in a 90 degrees cone
+	//		isItFacing = true;
+	//	else
+	//		isItFacing = false;
+	//}
+
+	//std::string facingText;
+	//if( isItFacing ) facingText = "True";
+	//else facingText = "False ";
+
+	//std::cout << "Facing: " << isItFacing << " " << facingText << " scale: " << facing << std::endl;
+	return isItFacing;
+}
+
+void setBehaviour()
+{
+
+	return;
+}
+
 
 void cOpponent::Update(void)
 {
-	std::vector<glm::vec3> newPosition;
+	//std::vector<glm::vec3> newAccel;
 
 #ifdef DEBUG_PRINT_STATUS_TO_CONSOLE 
 	std::cout << "Opponent " << this->m_OpponentID_or_Index << " Update() called" << std::endl;
@@ -124,7 +143,7 @@ void cOpponent::Update(void)
 
 			//	if( this->m_pOpponentManager )
 			//	{
-			//		this->m_pOpponentManager->setOpponentPositionAtIndex( this->m_OpponentID_or_Index, this->position );
+			//		this->m_pOpponentManager->setOpponentAccelAtIndex( this->m_OpponentID_or_Index, this->position );
 			//	}
 
 			//	Sleep( 100 );
@@ -208,7 +227,7 @@ void cOpponent::Update(void)
 
 			//		if( this->m_pOpponentManager )
 			//		{
-			//			this->m_pOpponentManager->setOpponentPositionAtIndex( this->m_OpponentID_or_Index, this->position );
+			//			this->m_pOpponentManager->setOpponentAccelAtIndex( this->m_OpponentID_or_Index, this->position );
 			//		}					
 			//	}
 			//	Sleep( 250 );

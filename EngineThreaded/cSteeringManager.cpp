@@ -47,17 +47,20 @@ void cSteeringManager::updateAll( double deltaTime )
 
 	cGameObject* pTargetGO = findTarget( nullptr );
 
-	::g_pOpponentManager->getOpponentPositionsAtIndexRange( vecDalekPositions );
+	::g_pOpponentManager->UpdateTargetPosition( ::g_pThePlayerGO->position, ::g_pThePlayerGO->getDirectionVector() );
 
+	::g_pOpponentManager->getOpponentAccelAtIndexRange( vecOpponentAccel );
+	::g_pOpponentManager->getOpponentBehaviourAtIndexRange( vecOpponentBehaviour );	
+	
 	for( int i = 0; i != ::g_vecOpponentsGO.size(); i++ )
 	{
 		cGameObject* pTheGO = ::g_vecOpponentsGO[i];
+		pTheGO->accel = vecOpponentAccel[i];
+		pTheGO->behaviour = vecOpponentBehaviour[i];
 
 		//setBehaviour( pTheGO, pTargetGO );
 		//solveSteering( pTheGO, pTargetGO );
-
-
-
+		
 		update( pTheGO, deltaTime );
 	}
 }

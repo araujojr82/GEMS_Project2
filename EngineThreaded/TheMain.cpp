@@ -67,7 +67,8 @@ iOpponentManager* g_pOpponentManager;
 std::map< unsigned int, cGameObject*> mapOpponentID_to_GameObject;
 
 // Local array to point the Opponents
-std::vector<glm::vec3> vecOpponentPositions;
+std::vector<glm::vec3> vecOpponentAccel;
+std::vector<eEnemyBehaviour> vecOpponentBehaviour;
 std::vector< cGameObject* > g_vecOpponentsGO;
 
 
@@ -664,7 +665,7 @@ int main( void )
 		move_player( deltaTime );
 
 		//updateAllObjects( deltaTime );
-		::g_pSteeringManager->updateAll( deltaTime );
+		::g_pSteeringManager->updateAll( deltaTime );		
 
 		// Check for collisions with the player and update it's health
 		collisionCheck();

@@ -33,6 +33,7 @@ public:
 	glm::vec3 velocity;
 	float maxVelocity;
 	glm::vec3 target;
+	glm::vec3 targetDirection;
 	float timeToMove;
 
 	float minDistanceToMove;

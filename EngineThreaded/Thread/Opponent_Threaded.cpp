@@ -19,7 +19,7 @@ cOpponentManager::cOpponentManager()
 
 bool cOpponentManager::CreateOpponentThread( cGameObject* pGameObject, cOpponent* &pOpponent )
 {
-	if ( this->m_nextOpponentID >= this->m_vecOpponentPosition.size() )
+	if ( this->m_nextOpponentID >= this->m_vecOpponentAccel.size() )
 	{	// Too many Opponents
 		return false;
 	}
@@ -64,7 +64,7 @@ bool cOpponentManager::Init(unsigned int numberOfOpponents)
 	for ( int count = 0; count != this->m_NumberOfOpponents; count++ )
 	{
 		// Make an "empty" Opponent at this index...
-		this->m_vecOpponentPosition.push_back(glm::vec3(0.0f));
+		this->m_vecOpponentAccel.push_back(glm::vec3(0.0f));
 		// ...and make an "empty" thread info at this index, too
 		this->m_vecOpponentThreadInfo.push_back( sOpponentThreadInfo() );
 
@@ -85,7 +85,7 @@ cOpponentManager::~cOpponentManager()
 //inline 
 bool cOpponentManager::m_IsIndexInRange(unsigned int index)
 {
-	if ( index < (unsigned int)this->m_vecOpponentPosition.size() )
+	if ( index < (unsigned int)this->m_vecOpponentAccel.size() )
 	{
 		return true;
 	}
@@ -94,7 +94,7 @@ bool cOpponentManager::m_IsIndexInRange(unsigned int index)
 
 
 // From iOpponentManager
-bool cOpponentManager::getOpponentPositionAtIndex(unsigned int index, glm::vec3 &position)
+bool cOpponentManager::getOpponentAccelAtIndex( unsigned int index, glm::vec3 &accel )
 {
 	if ( ! this->m_IsIndexInRange(index) )
 	{
@@ -103,7 +103,7 @@ bool cOpponentManager::getOpponentPositionAtIndex(unsigned int index, glm::vec3 
 	}
 
 	this->m_LockOpponentData();
-	position = this->m_vecOpponentPosition[index];
+	accel = this->m_vecOpponentAccel[index];
 	this->m_UnlockOpponentData();
 
 	return true;
@@ -111,7 +111,7 @@ bool cOpponentManager::getOpponentPositionAtIndex(unsigned int index, glm::vec3 
 
 // From iOpponentManager
 // Is only called by the Opponents... 
-bool cOpponentManager::setOpponentPositionAtIndex(unsigned int index, glm::vec3 position)
+bool cOpponentManager::setOpponentAccelAtIndex( unsigned int index, glm::vec3 accel )
 {
 	if (!this->m_IsIndexInRange(index))
 	{
@@ -120,22 +120,22 @@ bool cOpponentManager::setOpponentPositionAtIndex(unsigned int index, glm::vec3 
 	}
 
 	this->m_LockOpponentData();
-	this->m_vecOpponentPosition[index] = position;
+	this->m_vecOpponentAccel[index] = accel;
 	this->m_UnlockOpponentData();
 
 	return true;
 }
 
 // From iOpponentManger
-bool cOpponentManager::getOpponentPositionsAtIndexRange(std::vector<glm::vec3> &vecOpponentPositions)
+bool cOpponentManager::getOpponentAccelAtIndexRange(std::vector<glm::vec3> &vecOpponentAccel)
 {
 	this->m_LockOpponentData();
 	for ( unsigned int index = 0; index != this->m_NumberOfOpponents; index++ )
 	{
-		vecOpponentPositions[index] = this->m_vecOpponentPosition[index];
+		vecOpponentAccel[index] = this->m_vecOpponentAccel[index];
 	}
 	// Or...
-	//std::copy( this->m_vecOpponentPosition.begin(), this->m_vecOpponentPosition.end(), vecOpponentPositions );
+	//std::copy( this->m_vecOpponentAccel.begin(), this->m_vecOpponentAccel.end(), vecOpponentAccel );
 	this->m_UnlockOpponentData();
 
 	return true;
@@ -191,14 +191,62 @@ void cOpponentManager::SetIsUpdatingOnAllOpponents( bool bIsUpdating )
 }
 
 // Update target position on all Opponents
-void cOpponentManager::UpdateTargetPosition( glm::vec3 targetPosition )
+void cOpponentManager::UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection )
 {
 	this->m_LockOpponentData();
 	for( unsigned int index = 0; index != this->m_NumberOfOpponents; index++ )
 	{
 		this->m_vec_pOpponents[index]->target = targetPosition;
+		this->m_vec_pOpponents[index]->targetDirection = targetDirection;
 	}
 	this->m_UnlockOpponentData();
 
 	return;
+}
+
+
+// From iOpponentManager
+bool cOpponentManager::getOpponentBehaviourAtIndex( unsigned int index, eEnemyBehaviour &Behaviour )
+{
+	if( !this->m_IsIndexInRange( index ) )
+	{
+		// Index is out of range
+		return false;
+	}
+
+	this->m_LockOpponentData();
+	Behaviour = this->m_vecOpponentBehaviour[index];
+	this->m_UnlockOpponentData();
+
+	return true;
+}
+
+// From iOpponentManager
+// Is only called by the Opponents... 
+bool cOpponentManager::setOpponentBehaviourlAtIndex( unsigned int index, eEnemyBehaviour newBehaviour )
+{
+	if( !this->m_IsIndexInRange( index ) )
+	{
+		// Index is out of range
+		return false;
+	}
+
+	this->m_LockOpponentData();
+	this->m_vecOpponentBehaviour[index] = newBehaviour;
+	this->m_UnlockOpponentData();
+
+	return true;
+}
+
+// From iOpponentManger
+bool cOpponentManager::getOpponentBehaviourAtIndexRange( std::vector<eEnemyBehaviour> &vecOpponentBehaviour )
+{
+	this->m_LockOpponentData();
+	for( unsigned int index = 0; index != this->m_NumberOfOpponents; index++ )
+	{
+		vecOpponentBehaviour[index] = this->m_vecOpponentBehaviour[index];
+	}
+	this->m_UnlockOpponentData();
+
+	return true;
 }

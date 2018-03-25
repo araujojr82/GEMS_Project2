@@ -18,11 +18,12 @@
 extern std::vector< cGameObject* > g_vecGameObjects;
 
 // Local array to point the Daleks
-extern std::vector<glm::vec3> vecOpponentPositions;
+extern std::vector<glm::vec3> vecOpponentAccel;
 
 // Local array to point the Opponents
-std::vector<glm::vec3> vecOpponentPositions;
-std::vector< cGameObject* > g_vecOpponentsGO;
+extern std::vector<glm::vec3> vecOpponentAccel;
+extern std::vector<eEnemyBehaviour> vecOpponentBehaviour;
+extern std::vector< cGameObject* > g_vecOpponentsGO;
 
 extern bool g_bIsWireframe;
 

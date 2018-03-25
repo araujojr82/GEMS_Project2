@@ -12,7 +12,7 @@
 // Locked version, using a critical section lock.
 // 
 // - The shared data (opponent position) is placed in central location (in manager class)
-//   (this is thhe "std::vector<glm::vec3> m_vecOpponentPosition" vector
+//   (this is thhe "std::vector<glm::vec3> m_vecOpponentAccel" vector
 // - It is protected by a crtical section lock
 // - Dalaks write to a single location (index)
 // - All Opponent positions are read by both the Opponents and the game loop
@@ -36,13 +36,24 @@ public:
 	virtual bool CreateOpponentThread( cGameObject* pGameObject, cOpponent* &pOpponent );
 
 	// All of these call lock and unlock
-	virtual bool getOpponentPositionAtIndex(unsigned int index, glm::vec3 &position);
+	virtual bool getOpponentAccelAtIndex(unsigned int index, glm::vec3 &position);
 
 	// Called by each Opponent...
-	virtual bool setOpponentPositionAtIndex(unsigned int index, glm::vec3 position);
+	virtual bool setOpponentAccelAtIndex(unsigned int index, glm::vec3 position);
 	// Called by Opponents and the main render loop
 	// NOTE: Passed vector MUST be allocated BEFORE call
-	virtual bool getOpponentPositionsAtIndexRange( std::vector<glm::vec3> &vecOpponentPositions );
+	virtual bool getOpponentAccelAtIndexRange( std::vector<glm::vec3> &vecOpponentAccel );
+
+
+	// Gets a single Opponent. Not actually called by anything
+	virtual bool getOpponentBehaviourAtIndex( unsigned int index, eEnemyBehaviour &Behaviour );
+	// Sets the position of a single Opponent. 
+	// Called by each Opponent
+	virtual bool setOpponentBehaviourlAtIndex( unsigned int index, eEnemyBehaviour newBehaviour );
+	// Called by the game loop
+	virtual bool getOpponentBehaviourAtIndexRange( std::vector<eEnemyBehaviour> &vecOpponentBehaviour );
+
+
 
 	// Sets the bIsAlive to false, exiting the thread
 	virtual void KillAllOpponents(void);
@@ -51,7 +62,7 @@ public:
 	virtual void SetIsUpdatingOnAllOpponents( bool bIsUpdating );
 
 	// Update target Position on all Opponents
-	virtual void UpdateTargetPosition( glm::vec3 targetPosition );
+	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection );
 
 	virtual bool IsDataLocked(void);
 
@@ -72,7 +83,9 @@ private:
 
 	CRITICAL_SECTION m_cs_OpponentDataLock;
 
-	std::vector<glm::vec3> m_vecOpponentPosition;
+	std::vector<glm::vec3> m_vecOpponentAccel;
+	std::vector<eEnemyBehaviour> m_vecOpponentBehaviour;
+
 	// In order to kill or make active
 	std::vector<cOpponent*> m_vec_pOpponents;
 
