@@ -629,10 +629,10 @@ int main( void )
 				{
 					drawTagCircle( pTheGO );
 				}
-				else
-				{
-					::g_pDebugRenderer->addCircle( pTheGO->position, 0.25f, glm::vec3( 1.0f, 1.0f, 1.0f ) );
-				}
+				//else
+				//{
+				//	::g_pDebugRenderer->addCircle( pTheGO->position, 0.25f, glm::vec3( 1.0f, 1.0f, 1.0f ) );
+				//}
 				//drawCapsule( pTheGO->position );
 			}
 
@@ -861,6 +861,15 @@ void loadObjectsFile( std::string fileName )
 
 			::g_pOpponentManager = new cOpponentManager();
 			::g_pOpponentManager->Init( allObjects[index].nObjects );
+
+			// Local array to point the Opponents must be reserved			
+			vecOpponentAccel.reserve( allObjects[index].nObjects );
+			vecOpponentBehaviour.reserve( allObjects[index].nObjects );
+			for( int count = 0; count != allObjects[index].nObjects; count++ )
+			{
+				vecOpponentAccel.push_back( glm::vec3( 0.0f ) );
+				vecOpponentBehaviour.push_back( eEnemyBehaviour::IDLE );
+			}
 		}
 
 		// Create the number of gameObjects specified in the file for each line 

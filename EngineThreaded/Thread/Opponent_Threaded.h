@@ -35,11 +35,14 @@ public:
 	// returns false if there aren't enough 'slots' for the Opponents
 	virtual bool CreateOpponentThread( cGameObject* pGameObject, cOpponent* &pOpponent );
 
+
+	virtual bool setOpponentPositionAtIndex( unsigned int index, glm::vec3 position );
+
 	// All of these call lock and unlock
-	virtual bool getOpponentAccelAtIndex(unsigned int index, glm::vec3 &position);
+	virtual bool getOpponentAccelAtIndex(unsigned int index, glm::vec3 &accel);
 
 	// Called by each Opponent...
-	virtual bool setOpponentAccelAtIndex(unsigned int index, glm::vec3 position);
+	virtual bool setOpponentAccelAtIndex(unsigned int index, glm::vec3 accel);
 	// Called by Opponents and the main render loop
 	// NOTE: Passed vector MUST be allocated BEFORE call
 	virtual bool getOpponentAccelAtIndexRange( std::vector<glm::vec3> &vecOpponentAccel );
@@ -62,7 +65,7 @@ public:
 	virtual void SetIsUpdatingOnAllOpponents( bool bIsUpdating );
 
 	// Update target Position on all Opponents
-	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth );
+	virtual void UpdateTargetParam( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth );
 
 	virtual bool IsDataLocked(void);
 
@@ -83,6 +86,7 @@ private:
 
 	CRITICAL_SECTION m_cs_OpponentDataLock;
 
+	//std::vector<glm::vec3> m_vecOpponentPosition;
 	std::vector<glm::vec3> m_vecOpponentAccel;
 	std::vector<eEnemyBehaviour> m_vecOpponentBehaviour;
 

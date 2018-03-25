@@ -23,11 +23,13 @@ public:
 	// Passes the OpponentManager and the thread safe rand
 	virtual bool CreateOpponentThread( cGameObject* pGameObject, cOpponent* &pOpponent ) = 0;
 
+	virtual bool setOpponentPositionAtIndex( unsigned int index, glm::vec3 position ) = 0;
+
 	// Gets a single Opponent. Not actually called by anything
-	virtual bool getOpponentAccelAtIndex(unsigned int index, glm::vec3 &position) = 0;
+	virtual bool getOpponentAccelAtIndex(unsigned int index, glm::vec3 &accel) = 0;
 	// Sets the Accelaration of a single Opponent. 
 	// Called by each Opponent
-	virtual bool setOpponentAccelAtIndex(unsigned int index, glm::vec3 position) = 0;
+	virtual bool setOpponentAccelAtIndex(unsigned int index, glm::vec3 accel ) = 0;
 	// Called by both Opponents and the game loop
 	virtual bool getOpponentAccelAtIndexRange(std::vector<glm::vec3> &vecOpponentAccel) = 0;
 
@@ -55,7 +57,7 @@ public:
 	virtual void SetIsUpdatingOnAllOpponents( bool bIsUpdating ) = 0;
 
 	// Update target Position on all Opponents
-	virtual void UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth ) = 0;
+	virtual void UpdateTargetParam( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth ) = 0;
 
 };
 

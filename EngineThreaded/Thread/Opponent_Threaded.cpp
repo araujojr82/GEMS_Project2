@@ -28,7 +28,7 @@ bool cOpponentManager::CreateOpponentThread( cGameObject* pGameObject, cOpponent
 	pOpponent->setOpponentManager( this );
 	pOpponent->setRandThreaded( g_pThreadedRandom );	
 
-	pOpponent->maxVelocity = 25.0f;
+	//pOpponent->maxVelocity = 1.5f;
 
 	pOpponent->position = pGameObject->position;
 	
@@ -63,6 +63,7 @@ bool cOpponentManager::Init(unsigned int numberOfOpponents)
 	{
 		// Make an "empty" Opponent at this index...
 		this->m_vecOpponentAccel.push_back(glm::vec3(0.0f));
+		this->m_vecOpponentBehaviour.push_back( eEnemyBehaviour::IDLE );
 		// ...and make an "empty" thread info at this index, too
 		this->m_vecOpponentThreadInfo.push_back( sOpponentThreadInfo() );
 
@@ -90,6 +91,20 @@ bool cOpponentManager::m_IsIndexInRange(unsigned int index)
 	return false;
 }
 
+bool cOpponentManager::setOpponentPositionAtIndex( unsigned int index, glm::vec3 position )
+{
+	if( !this->m_IsIndexInRange( index ) )
+	{
+		// Index is out of range
+		return false;
+	}
+
+	this->m_LockOpponentData();
+	this->m_vec_pOpponents[index]->position = position;
+	this->m_UnlockOpponentData();
+
+	return true;
+}
 
 // From iOpponentManager
 bool cOpponentManager::getOpponentAccelAtIndex( unsigned int index, glm::vec3 &accel )
@@ -189,7 +204,7 @@ void cOpponentManager::SetIsUpdatingOnAllOpponents( bool bIsUpdating )
 }
 
 // Update target position on all Opponents
-void cOpponentManager::UpdateTargetPosition( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth )
+void cOpponentManager::UpdateTargetParam( glm::vec3 targetPosition, glm::vec3 targetDirection, float targetHealth )
 {
 	this->m_LockOpponentData();
 	for( unsigned int index = 0; index != this->m_NumberOfOpponents; index++ )

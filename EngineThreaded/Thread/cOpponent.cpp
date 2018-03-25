@@ -104,7 +104,6 @@ void cOpponent::setBehaviour()
 		}
 	}
 
-
 	if( this->m_pOpponentManager )
 	{
 		this->m_pOpponentManager->setOpponentBehaviourlAtIndex( this->m_OpponentID_or_Index, this->behaviour );
@@ -115,25 +114,17 @@ void cOpponent::setBehaviour()
 
 void cOpponent::Update(void)
 {
-	//std::vector<glm::vec3> newAccel;
-
-#ifdef DEBUG_PRINT_STATUS_TO_CONSOLE 
-	std::cout << "Opponent " << this->m_OpponentID_or_Index << " Update() called" << std::endl;
-	std::cout.flush();
-#endif
-
+	
 	float totalTimeSinceReset = this->m_pTimer->get_fLondDurationTotalSeconds();
 
 	if ( totalTimeSinceReset >= this->timeToMove )
 	{
-
 		if( this->m_pRand )
 		{
+			this->accel = glm::vec3( 0.0f );
 
 			setBehaviour();		
-
-			//pTheGO->accel += wander( pTheGO );
-
+			
 			switch( this->behaviour )
 			{
 				case eEnemyBehaviour::SEEK:
@@ -149,125 +140,11 @@ void cOpponent::Update(void)
 					break;
 			}
 
+			if( this->m_pOpponentManager )
+			{
+				this->m_pOpponentManager->setOpponentAccelAtIndex( this->m_OpponentID_or_Index, this->accel );
+			}
 
-
-
-			//if( !this->bIsScanning )
-			//{
-			//	int hDist = ( int )this->target.x - this->position.x;
-			//	int vDist = ( int )this->target.z - this->position.z;
-
-			//	int posX = ( int )this->position.x;
-			//	int posZ = ( int )this->position.z;
-			//	int newX = posX;
-			//	int newZ = posZ;
-
-			//	if( hDist > 0 ) newX = posX + 1;
-			//	else if( hDist < 0 ) newX = posX - 1;
-			//	if( vDist > 0 ) newZ = posZ + 1;
-			//	else if( vDist < 0 ) newZ = posZ - 1;
-
-			//	if( newPosition.size() == 1 )
-			//	{
-			//		this->position = newPosition[0];
-			//	}
-			//	else if( newPosition.size() > 1 )
-			//	{
-			//		if( hDist > vDist ) this->position = newPosition[0];
-			//		else this->position = newPosition[1];
-			//	}
-
-			//	if( this->m_pOpponentManager )
-			//	{
-			//		this->m_pOpponentManager->setOpponentAccelAtIndex( this->m_OpponentID_or_Index, this->position );
-			//	}
-
-			//	Sleep( 100 );
-			//}
-			//else
-			//{	// This is a scanning protocol
-			//	int hDist = ( int )this->target.x - this->position.x;
-			//	int vDist = ( int )this->target.z - this->position.z;
-
-			//	int maxX = this->m_pOpponentManager->GetWorldMaxX() -1;
-			//	int maxZ = this->m_pOpponentManager->GetWorldMaxZ() -1;
-
-			//	if( ( abs( hDist ) == 0 && abs( vDist ) == 1 ) ||
-			//		( abs( hDist ) == 1 && abs( vDist ) == 0 ) )
-			//	{
-			//		// The Opponent Scan is too close
-			//	}
-			//	else
-			//	{
-			//		int posX = ( int )this->position.x;
-			//		int posZ = ( int )this->position.z;
-
-			//		int newX;
-			//		int newZ;
-			//		
-			//		if( posZ > 0 )
-			//		{
-			//			newX = posX;
-			//			newZ = posZ - 1;
-			//			
-			//			// Test if it's a valid position, false means it's a space
-			//			if( !this->m_pOpponentManager->CheckWorldPosition( newX, newZ ) )						
-			//				newPosition.push_back( glm::vec3( ( float )newX, this->position.y, ( float )newZ ) );
-			//		}
-			//		
-			//		if( posX > 0 )
-			//		{
-			//			newX = posX - 1;
-			//			newZ = posZ;
-
-			//			// Test if it's a valid position, false means it's a space
-			//			if( !this->m_pOpponentManager->CheckWorldPosition( newX, newZ ) )
-			//				newPosition.push_back( glm::vec3( ( float )newX, this->position.y, ( float )newZ ) );
-			//		}
-
-			//		if( posX < maxX )
-			//		{
-			//			newX = posX + 1;
-			//			newZ = posZ;
-
-			//			// Test if it's a valid position, false means it's a space
-			//			if( !this->m_pOpponentManager->CheckWorldPosition( newX, newZ ) )
-			//				newPosition.push_back( glm::vec3( ( float )newX, this->position.y, ( float )newZ ) );
-			//		}
-
-			//		if( posZ < maxZ )
-			//		{
-			//			newX = posX;
-			//			newZ = posZ + 1;
-
-			//			// Test if it's a valid position, false means it's a space
-			//			if( !this->m_pOpponentManager->CheckWorldPosition( newX, newZ ) )
-			//				newPosition.push_back( glm::vec3( ( float )newX, this->position.y, ( float )newZ ) );
-			//		}
-
-			//		if( newPosition.size() > 0 )
-			//		{
-			//			int origSize = newPosition.size();
-
-			//			for( int times = 0; times < 5; times++ )
-			//			{
-			//				for( int i = 0; i != origSize; i++ )
-			//				{
-			//					newPosition.push_back( newPosition[i] );
-			//				}
-			//			}						
-
-			//			int index = ( int )getRandInRange<float>( 0, newPosition.size()-1, ( float )this->m_pRand->getNextRandDouble() );
-			//			this->position = newPosition[index];
-			//		}
-
-			//		if( this->m_pOpponentManager )
-			//		{
-			//			this->m_pOpponentManager->setOpponentAccelAtIndex( this->m_OpponentID_or_Index, this->position );
-			//		}					
-			//	}
-			//	Sleep( 250 );
-			//}
 		}//if ( this->m_pRand )
 
 		this->m_pTimer->ResetLongDuration();

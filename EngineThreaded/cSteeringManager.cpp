@@ -45,9 +45,7 @@ void cSteeringManager::updateAll( double deltaTime )
 {
 	this->currentTimeStep = deltaTime;
 
-	//cGameObject* pTargetGO = findTarget( nullptr );
-
-	::g_pOpponentManager->UpdateTargetPosition( ::g_pThePlayerGO->position, ::g_pThePlayerGO->getDirectionVector(), ::g_pThePlayerGO->health );
+	::g_pOpponentManager->UpdateTargetParam( ::g_pThePlayerGO->position, ::g_pThePlayerGO->getDirectionVector(), ::g_pThePlayerGO->health );
 
 	::g_pOpponentManager->getOpponentAccelAtIndexRange( vecOpponentAccel );
 	::g_pOpponentManager->getOpponentBehaviourAtIndexRange( vecOpponentBehaviour );	
@@ -62,6 +60,8 @@ void cSteeringManager::updateAll( double deltaTime )
 		//solveSteering( pTheGO, pTargetGO );
 		
 		update( pTheGO, deltaTime );
+
+		::g_pOpponentManager->setOpponentPositionAtIndex( i, pTheGO->position );
 	}
 }
 
@@ -118,7 +118,7 @@ void cSteeringManager::update( cGameObject* pTheGO, double deltaTime )
 	{
 		glm::vec3 tempVel = velocity * 1.0f; // scaleVector( ( velocity + position ), 1.0f );
 		tempVel += position;
-		::g_pDebugRenderer->addLine( position, tempVel, glm::vec3( 1.0f, 0.0f, 0.0f ), false );
+		//::g_pDebugRenderer->addLine( position, tempVel, glm::vec3( 1.0f, 0.0f, 0.0f ), false );
 	}
 
 	if( !isnan( velocity.x ) && !isnan( velocity.y ) && !isnan( velocity.z ) )
