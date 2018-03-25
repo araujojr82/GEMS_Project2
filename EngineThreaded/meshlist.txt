@@ -1,0 +1,7 @@
+rick       assets/models/rick.ply
+meeseeks   assets/models/meeseeks.ply
+circle     assets/models/circle_full.ply
+terrain    assets/models/ground_terrain.ply
+scary      assets/models/scary.ply
+morty      assets/models/morty.ply
+capsule    assets/models/capsule.ply
